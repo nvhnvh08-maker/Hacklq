@@ -25,6 +25,22 @@
     return (val || "").toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 6);
   }
 
+  
+  var demoBtn = document.getElementById("demoBtn");
+  if (demoBtn && input) {
+    demoBtn.addEventListener("click", function () {
+      input.value = "TEST88";
+      clearErr();
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<span>ĐANG MỞ BẢN ĐỒ MẪU...</span>';
+      }
+      setTimeout(function () {
+        window.location.href = "./viewer.html?code=TEST88";
+      }, 150);
+    });
+  }
+
   // Hiển thị lỗi từ query parameter nếu có
   try {
     var params = new URLSearchParams(window.location.search);
