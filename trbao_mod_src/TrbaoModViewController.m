@@ -280,7 +280,7 @@
     // Nút "Mở Web Map (map.yong38.com)"
     self.openWebButton = [UIButton buttonWithType:UIButtonTypeCustom];
     self.openWebButton.frame = CGRectMake(20, 212, self.shareMapBoxView.bounds.size.width - 40, 42);
-    [self.openWebButton setTitle:@"🌐 Mở Web: map.yong38.com" forState:UIControlStateNormal];
+    [self.openWebButton setTitle:@"🌐 Mở Web TRBAO MOD Share Map" forState:UIControlStateNormal];
     self.openWebButton.titleLabel.font = [UIFont systemFontOfSize:14 weight:UIFontWeightHeavy];
     self.openWebButton.layer.cornerRadius = 12;
     self.openWebButton.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.92];

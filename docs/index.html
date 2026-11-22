@@ -2,21 +2,310 @@
 <html lang="vi">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>YONG38 · Share Map</title>
-  <link rel="stylesheet" href="/home.css?v=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#06090e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>TRBAO MOD · Share Map VIP</title>
+  <link rel="icon" href="./assets/minimap.png" type="image/png">
+  <link rel="stylesheet" href="./home.css?v=2.0">
+  <style>
+    /* Embedded Critical CSS - Đảm bảo 100% không bao giờ bị vỡ giao diện trắng */
+    :root {
+      --bg: #070a10;
+      --card-bg: #0e1420;
+      --card-border: rgba(56, 189, 248, 0.16);
+      --input-bg: #070d17;
+      --input-border: rgba(255, 255, 255, 0.12);
+      --fg-primary: #f8fafc;
+      --fg-secondary: #94a3b8;
+      --fg-muted: #64748b;
+      --accent: #38bdf8;
+      --accent-glow: rgba(56, 189, 248, 0.35);
+      --accent-hover: #0ea5e9;
+      --accent-text: #04121e;
+      --live-green: #10b981;
+      --err-bg: rgba(239, 68, 68, 0.12);
+      --err-border: rgba(239, 68, 68, 0.4);
+      --err-text: #fca5a5;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+    body {
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.08) 0%, transparent 60%),
+        radial-gradient(circle at 50% 100%, rgba(14, 165, 233, 0.05) 0%, transparent 50%);
+      color: var(--fg-primary);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      padding: 20px 16px;
+      line-height: 1.5;
+    }
+    .container {
+      width: 100%;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .brand-badge {
+      align-self: center;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(14, 165, 233, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--accent);
+      text-transform: uppercase;
+    }
+    .pulse-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--live-green);
+      box-shadow: 0 0 8px var(--live-green);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 28px 22px;
+      box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+    }
+    .title {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      color: var(--fg-primary);
+      margin-bottom: 6px;
+    }
+    .title span {
+      color: var(--accent);
+    }
+    .subtitle {
+      font-size: 13px;
+      color: var(--fg-secondary);
+      margin-bottom: 22px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .code-input {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1.5px solid var(--input-border);
+      border-radius: 14px;
+      color: #fff;
+      font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      font-size: 26px;
+      font-weight: 800;
+      text-align: center;
+      letter-spacing: 8px;
+      text-transform: uppercase;
+      padding: 14px 44px 14px 20px;
+      transition: all 0.2s ease;
+      outline: none;
+    }
+    .code-input::placeholder {
+      color: #334155;
+      letter-spacing: 8px;
+    }
+    .code-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+    .paste-btn {
+      position: absolute;
+      right: 10px;
+      background: rgba(255, 255, 255, 0.08);
+      border: none;
+      border-radius: 8px;
+      color: var(--fg-secondary);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 6px 9px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .paste-btn:active {
+      background: rgba(255, 255, 255, 0.16);
+      color: var(--fg-primary);
+    }
+    .submit-btn {
+      background: var(--accent);
+      color: var(--accent-text);
+      border: none;
+      border-radius: 14px;
+      padding: 14px;
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 14px rgba(56, 189, 248, 0.3);
+    }
+    .submit-btn:hover {
+      background: var(--accent-hover);
+      box-shadow: 0 6px 20px rgba(56, 189, 248, 0.45);
+    }
+    .submit-btn:active {
+      transform: scale(0.98);
+    }
+    .submit-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .alert-box {
+      display: none;
+      margin-top: 14px;
+      padding: 11px 14px;
+      border-radius: 12px;
+      background: var(--err-bg);
+      border: 1px solid var(--err-border);
+      color: var(--err-text);
+      font-size: 13px;
+      font-weight: 600;
+      text-align: left;
+      line-height: 1.4;
+    }
+    .alert-box.show {
+      display: block;
+      animation: fadeIn 0.2s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .info-list {
+      margin-top: 20px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      text-align: left;
+    }
+    .info-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      font-size: 12px;
+      color: var(--fg-secondary);
+      line-height: 1.45;
+    }
+    .info-icon {
+      flex-shrink: 0;
+      font-size: 13px;
+      margin-top: 1px;
+    }
+    .info-item b {
+      color: var(--fg-primary);
+    }
+    .footer {
+      text-align: center;
+      font-size: 11px;
+      color: var(--fg-muted);
+      letter-spacing: 0.3px;
+    }
+    .footer strong {
+      color: var(--accent);
+      font-weight: 600;
+    }
+  </style>
 </head>
 <body>
-  <main class="home">
-    <h1>YONG38 · Share Map</h1>
-    <p>Nhập <b>mã 6 ký tự</b> của trận để xem trực tiếp.</p>
-    <form class="code-form" action="/go" method="get" autocomplete="off">
-      <input class="code-input" name="code" maxlength="6" placeholder="A3F9K2" required spellcheck="false" autocapitalize="characters" inputmode="text">
-      <button class="code-btn" type="submit">Xem trận</button>
-    </form>
-    <div id="homeErr" class="home-err" role="alert"></div>
-    <p class="hint">Mã hiện trong app khi bật <b>"Chia Sẻ Map"</b>.</p>
-  </main>
-  <script src="/home.js?v=1"></script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a5e68d5f887ffdcf',t:'MTc5NTMzNjAxNw=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a5e68d5f887ffdcf',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+  <div class="container">
+    <div class="brand-badge">
+      <span class="pulse-dot"></span>
+      <span>TRBAO MOD · LIVE RADAR</span>
+    </div>
+
+    <main class="card">
+      <h1 class="title">TRBAO MOD <span>·</span> Share Map</h1>
+      <p class="subtitle">Bản đồ chiến thuật thời gian thực Liên Quân Mobile</p>
+
+      <form id="codeForm" class="form-group" autocomplete="off">
+        <div class="input-wrapper">
+          <input 
+            id="codeInput" 
+            class="code-input" 
+            name="code" 
+            maxlength="6" 
+            placeholder="A3F9K2" 
+            required 
+            spellcheck="false" 
+            autocapitalize="characters" 
+            inputmode="text"
+            autofocus
+          >
+          <button type="button" id="pasteBtn" class="paste-btn" title="Dán mã từ clipboard">Dán</button>
+        </div>
+
+        <button id="submitBtn" class="submit-btn" type="submit">
+          <span>VÀO XEM TRẬN</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+      </form>
+
+      <div id="homeErr" class="alert-box" role="alert"></div>
+
+      <div class="info-list">
+        <div class="info-item">
+          <span class="info-icon">💡</span>
+          <span>Mã 6 ký tự hiển thị trong game khi bật <b>"Chia Sẻ Map"</b> (Tab 2 Tools).</span>
+        </div>
+        <div class="info-item">
+          <span class="info-icon">⚡</span>
+          <span>Truyền trực tiếp vị trí 10 tướng, lượng máu và trạng thái công trình.</span>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      Bản quyền <strong>by trbaomod</strong> · Đồng bộ thời gian thực
+    </footer>
+  </div>
+
+  <script src="./home.js?v=2.0"></script>
+</body>
 </html>
