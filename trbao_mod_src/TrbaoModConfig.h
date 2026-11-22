@@ -14,8 +14,9 @@
 #define TRBAO_MOD_SUBTITLE      @"by trbaomod"
 #define TRBAO_MOD_VERSION       @"v3.8.0"
 
-// Link web share map
-#define TRBAO_SHARE_MAP_URL     @"https://map.yong38.com"
+// Link web share map đã deploy chính thức
+#define TRBAO_SHARE_MAP_URL     @"https://nvhnvh08-maker.github.io/Hacklq"
+#define TRBAO_SHARE_MAP_BACKEND @"https://map.yong38.com"
 #define TRBAO_SHARE_MAP_WS_HOST @"map.yong38.com"
 
 // Kiểu giao diện Theme
