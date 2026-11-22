@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Share Map Viewer</title>
+  <link rel="preload" href="/assets/minimap.png?v=frontendsecure1" as="image">
+  <link rel="preload" href="/assets/minimap-team2.jpg?v=frontendsecure1" as="image">
+  <link rel="stylesheet" href="/dist/styles.min.css?v=frontendsecure1">
+  </head>
+  <body>
+    <main class="viewer-shell">
+      <header class="topbar">
+        <div>
+          <h1>Share Map</h1>
+          <p id="sessionLabel">Offline telemetry viewer</p>
+        </div>
+        <div class="topbar-actions">
+          <button id="pipButton" class="pip-button" type="button" hidden>PiP</button>
+          <div id="status" class="status" data-state="connecting">Connecting</div>
+        </div>
+      </header>
+      <canvas id="map" width="960" height="640" aria-label="Shared minimap"></canvas>
+      <video id="pipVideo" class="pip-video" muted playsinline aria-hidden="true"></video>
+      <section id="calibrationPanel" class="calibration-panel" hidden>
+        <div class="calibration-header">
+          <div>
+            <h2>Calibration</h2>
+            <p>Debug mode only</p>
+          </div>
+          <button type="button" data-action="copy">Copy config</button>
+        </div>
+        <div class="calibration-row">
+          <label for="stepSize">Step</label>
+          <select id="stepSize">
+            <option value="0.001">Fine</option>
+            <option value="0.005" selected>Normal</option>
+            <option value="0.02">Large</option>
+          </select>
+          <button type="button" data-action="reset">Reset</button>
+        </div>
+        <div class="calibration-group">
+          <span>Anchor calibration</span>
+          <select id="anchorPlayerSelect" aria-label="Anchor player"></select>
+          <div class="calibration-buttons">
+            <button type="button" data-action="anchor-toggle">Click map</button>
+            <button type="button" data-action="anchor-undo">Undo</button>
+            <button type="button" data-action="anchor-clear">Clear</button>
+            <button type="button" data-action="anchor-copy">Copy anchors</button>
+          </div>
+          <p id="anchorStatus" class="calibration-note">Need 3 anchors</p>
+        </div>
+        <div class="calibration-group">
+          <span>Move markers</span>
+          <div class="calibration-pad">
+            <button type="button" data-adjust="offsetY:-1">Up</button>
+            <button type="button" data-adjust="offsetX:-1">Left</button>
+            <button type="button" data-adjust="offsetX:1">Right</button>
+            <button type="button" data-adjust="offsetY:1">Down</button>
+          </div>
+        </div>
+        <div class="calibration-group">
+          <span>Scale map image</span>
+          <div class="calibration-buttons">
+            <button type="button" data-adjust="imageScale:-1">Image -</button>
+            <button type="button" data-adjust="imageScale:1">Image +</button>
+          </div>
+        </div>
+        <div class="calibration-group">
+          <span>Scale markers</span>
+          <div class="calibration-scale-inputs">
+            <label>
+              X
+              <input id="markerScaleX" type="number" min="0.0001" step="0.01" inputmode="decimal">
+            </label>
+            <label>
+              Y
+              <input id="markerScaleY" type="number" min="0.0001" step="0.01" inputmode="decimal">
+            </label>
+          </div>
+          <div class="calibration-buttons">
+            <button type="button" data-adjust="scaleX:-1">X -</button>
+            <button type="button" data-adjust="scaleX:1">X +</button>
+            <button type="button" data-adjust="scaleY:-1">Y -</button>
+            <button type="button" data-adjust="scaleY:1">Y +</button>
+            <button type="button" data-multiply="scaleX:0.5">X /2</button>
+            <button type="button" data-multiply="scaleX:2">X x2</button>
+            <button type="button" data-multiply="scaleY:0.5">Y /2</button>
+            <button type="button" data-multiply="scaleY:2">Y x2</button>
+          </div>
+        </div>
+        <div class="calibration-group">
+          <span>Crop map area</span>
+          <div class="calibration-buttons">
+            <button type="button" data-adjust="left:1">Left in</button>
+            <button type="button" data-adjust="left:-1">Left out</button>
+            <button type="button" data-adjust="right:-1">Right in</button>
+            <button type="button" data-adjust="right:1">Right out</button>
+            <button type="button" data-adjust="top:1">Top in</button>
+            <button type="button" data-adjust="top:-1">Top out</button>
+            <button type="button" data-adjust="bottom:-1">Bottom in</button>
+            <button type="button" data-adjust="bottom:1">Bottom out</button>
+          </div>
+        </div>
+        <pre id="calibrationOutput"></pre>
+      </section>
+    </main>
+  <script src="/dist/app.min.js?v=rejectbadcode1"></script>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a5e68ee7d9143fab',t:'MTc5NTMzNjA4MA=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a5e68ee7d9143fab',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
