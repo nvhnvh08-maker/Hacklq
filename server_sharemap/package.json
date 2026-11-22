@@ -1,0 +1,13 @@
+{
+  "name": "trbao-sharemap-server",
+  "version": "1.0.0",
+  "description": "Server phát sóng trực tiếp Share Map Liên Quân Mobile cho TrbaoMod VIP",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "ws": "^8.18.0"
+  }
+}

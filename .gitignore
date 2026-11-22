@@ -1,0 +1,21 @@
+# Large binary files
+*.ipa
+lq.ipa
+extracted/
+*.dylib
+Runtimeqau
+
+# Temporary analysis scripts
+_*
+_*.txt
+_*.ps1
+_*.js
+_*.py
+
+# Node dependencies
+node_modules/
+npm-debug.log
+
+# System files
+.DS_Store
+Thumbs.db

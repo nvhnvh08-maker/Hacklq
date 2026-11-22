@@ -1,0 +1,75 @@
+name: Build TrbaoMod ARM64 Dylib
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, master]
+
+jobs:
+  build-arm64-dylib:
+    runs-on: macos-14
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Compile TrbaoModVIP.dylib
+        run: |
+          set -e
+          SDKPATH=$(xcrun --sdk iphoneos --show-sdk-path)
+          echo "Using iOS SDK at: $SDKPATH"
+
+          # 1. Compile TrbaoModVIP.dylib
+          xcrun -sdk iphoneos clang \
+            -dynamiclib \
+            -arch arm64 \
+            -isysroot "$SDKPATH" \
+            -miphoneos-version-min=14.0 \
+            -fobjc-arc \
+            -O2 \
+            -framework UIKit \
+            -framework Foundation \
+            -framework CoreGraphics \
+            -framework QuartzCore \
+            trbao_mod_src/TrbaoFloatingButton.m \
+            trbao_mod_src/TrbaoModViewController.m \
+            trbao_mod_src/TrbaoShareMapManager.m \
+            trbao_mod_src/TrbaoModHooks.m \
+            -install_name @rpath/TrbaoModVIP.dylib \
+            -o TrbaoModVIP.dylib
+
+          codesign -f -s - TrbaoModVIP.dylib
+          echo "=== Compilation Success: TrbaoModVIP.dylib ==="
+          file TrbaoModVIP.dylib
+          otool -L TrbaoModVIP.dylib
+
+          # 2. Đồng thời compile phiên bản Runtimeqau để thay thế trực tiếp vào IPA gốc
+          xcrun -sdk iphoneos clang \
+            -dynamiclib \
+            -arch arm64 \
+            -isysroot "$SDKPATH" \
+            -miphoneos-version-min=14.0 \
+            -fobjc-arc \
+            -O2 \
+            -framework UIKit \
+            -framework Foundation \
+            -framework CoreGraphics \
+            -framework QuartzCore \
+            trbao_mod_src/TrbaoFloatingButton.m \
+            trbao_mod_src/TrbaoModViewController.m \
+            trbao_mod_src/TrbaoShareMapManager.m \
+            trbao_mod_src/TrbaoModHooks.m \
+            -install_name @executable_path/Frameworks/Runtimeqau.framework/Runtimeqau \
+            -o Runtimeqau
+
+          codesign -f -s - Runtimeqau
+          echo "=== Compilation Success: Runtimeqau ==="
+
+      - name: Upload TrbaoModVIP Dylib
+        uses: actions/upload-artifact@v4
+        with:
+          name: TrbaoModVIP_ARM64
+          path: |
+            TrbaoModVIP.dylib
+            Runtimeqau
+          retention-days: 14
